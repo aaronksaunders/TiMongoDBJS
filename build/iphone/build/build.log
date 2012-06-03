@@ -1,0 +1,80 @@
+================================================================================
+Appcelerator Titanium Diagnostics Build Log
+The contents of this file are useful to send to Appcelerator Support if
+reporting an issue to help us understand your environment, build settings
+and aid in debugging. Please attach this log to any issue that you report.
+================================================================================
+
+Starting build at 06/03/12 03:10
+
+Build details:
+
+   timestamp=04/12/12 16:33
+   module_apiversion=2
+   version=2.0.1
+   githash=999c68a
+
+
+Script arguments:
+   /Users/aaronksaunders/Library/Application Support/Titanium/mobilesdk/osx/2.0.1.GA2/iphone/builder.py
+   simulator
+   5.1
+   /Users/aaronksaunders/Documents/Titanium Studio Workspace/mobimanage/question
+   ci.question
+   question
+   universal
+   iphone
+   
+
+Building from: /Users/aaronksaunders/Library/Application Support/Titanium/mobilesdk/osx/2.0.1.GA2/iphone
+Platform: Darwin Kernel Version 11.4.0: Mon Apr  9 19:32:15 PDT 2012; root:xnu-1699.26.8~1/RELEASE_X86_64
+
+Xcode path is: /Applications/Xcode.app/Contents/Developer
+
+
+githash=999c68a, existing_git_hash=999c68a
+writing contents of /Users/aaronksaunders/Documents/Titanium Studio Workspace/mobimanage/question/build/iphone/project.xcconfig:
+
+TI_VERSION=2.0.1.GA2
+TI_SDK_DIR=/Users/aaronksaunders/Library/Application Support/Titanium/mobilesdk/osx/$(TI_VERSION)/iphone
+TI_APPID=ci.question
+OTHER_LDFLAGS[sdk=iphoneos*]=$(inherited) -weak_framework iAd
+OTHER_LDFLAGS[sdk=iphonesimulator*]=$(inherited) -weak_framework iAd
+#include "module"
+
+old contents
+
+
+Generated the following stylecode code:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>classes</key>
+		<dict>
+</dict>
+
+		<key>classes_density</key>
+		<dict>
+</dict>
+
+		<key>ids</key>
+		<dict>
+</dict>
+
+		<key>ids_density</key>
+		<dict>
+</dict>
+
+		<key>tags</key>
+		<dict>
+</dict>
+
+		<key>tags_density</key>
+		<dict>
+</dict>
+
+	</dict>
+</plist>
+Finishing build
