@@ -1,4 +1,3 @@
-var APP = {};
 var Client = require('mongoDBClient').Client;
 
 var client = null;
@@ -7,14 +6,14 @@ if(true) {
 	// mongolabs test
 	client = new Client({
 		url : "https://api.mongolab.com/api/1/",
-		apikey : '4fd3dc50e4b0f453cdeadd2d'
+		apikey : ''
 	});
 	database = "firstdatabase";
 } else {
 	//mongohq test
 	client = new Client({
 		url : 'https://api.mongohq.com',
-		apikey : 'ira8ckpp77qfkpnsf2lc'
+		apikey : ''
 	});
 	database = "test_aks";
 }
@@ -110,6 +109,10 @@ function createDocument(db_name) {
 		},
 		"success" : function(success_data) {
 			Ti.API.info('documents.create ' + success_data);
+			
+			// now display all documents
+			getDocuments(database);
+			
 		},
 		"error" : function(error_data) {
 			Ti.API.info('documents.create: error ' + error_data);
@@ -148,15 +151,15 @@ function getDocuments(db_name) {
 	client.documents.all({
 		"db_name" : db_name || "firstdatabase",
 		"col_name" : "my_users",
-		//"doc_id" : "4fcacbac33256c0008000005",
 		"data" : {
 		},
 		"success" : function(success_data) {
 			Ti.API.info('documents.find ' + success_data);
+			
 		}
 	});
 }
 
 createDocument(database);
-//getDocuments(database);
+getDocuments(database);
 
