@@ -87,5 +87,4 @@ createDocument(database);
 <li><a href="http://bit.ly/LfZxDs">MongoHQ</a></li>
 <li><a href="http://www.mongodb.org/">MongoDB</a></li>
 <li><a href="http://bit.ly/LgG02r">Example on gist</a></li>
-<li>GitHub Project Repository</li>
 </ul>
