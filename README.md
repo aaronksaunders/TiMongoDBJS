@@ -1,7 +1,5 @@
-TiMongoDBJS
+Titanium Appcelerator Quickie: MongoDB JS Client
 ===========
-
-TiMongoDB JS
 
 <p>Was hacking around with this code a few weeks ago and wanted to finish it up and get it out for some feedback.</p>
 <p>If you haven't heard, <a href="http://www.mongodb.org/">mongodb</a> is the hottest thing to come around for quite some time. It also looks like it is &nbsp;a <a href="http://read.bi/LfZaIZ">skill that is in high demand</a>.</p>
