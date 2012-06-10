@@ -1,32 +1,3 @@
-var stringify = exports.stringify = function(obj, prefix) {
-	if(Array.isArray(obj)) {
-		return stringifyArray(obj, prefix);
-	} else if('[object Object]' == toString.call(obj)) {
-		return stringifyObject(obj, prefix);
-	} else if('string' == typeof obj) {
-		return stringifyString(obj, prefix);
-	} else {
-		return prefix + '=' + obj;
-	}
-};
-
-function stringifyString(str, prefix) {
-	if(!prefix)
-		throw new TypeError('stringify expects an object');
-	return prefix + '=' + encodeURIComponent(str);
-}
-
-function stringifyObject(obj, prefix) {
-	var ret = [], keys = Object.keys(obj), key;
-
-	for(var i = 0, len = keys.length; i < len; ++i) {
-		key = keys[i];
-		ret.push(stringify(obj[key], prefix ? prefix + '[' + encodeURIComponent(key) + ']' : encodeURIComponent(key)));
-	}
-
-	return ret.join('&');
-}
-
 exports.Client = function(g) {
 	var Collection, Connection, Database, Deployment, Document, Index, Invoice, Plan, SlowQuery, connection;
 	Connection = function(options) {
@@ -47,12 +18,22 @@ exports.Client = function(g) {
 			return data;
 		};
 		error = options['error'];
-		data['_apikey'] = this.apikey;
 		try {
-			
-			if ( g._mhq_options.url ) {
-				path = path.replace("/" + g._mhq_options.DATABASES + "/" ,"/");
-				path = path.replace("/collections/" ,"/");
+
+			if(g._mhq_options.url && false) {
+				path = path.replace("/" + g._mhq_options.DATABASES + "/", "/");
+				path = path.replace("/collections/", "/");
+			}
+
+			if(g._mhq_options.is_mongolab) {
+				path = path.replace("/documents", "");
+				path = path + "?apiKey=" + this.apikey
+
+				// remove the "document" data and just pass the data
+				data = data.document;
+
+			} else {
+				data['_apikey'] = this.apikey;
 			}
 
 			if(Titanium.Network.online === false) {
@@ -80,18 +61,21 @@ exports.Client = function(g) {
 				xhr.open(method, this.url + path);
 
 				xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-				xhr.setRequestHeader("Accept-Type", "application/json; charset=utf-8");
-				xhr.setRequestHeader("User-Agent", "MongoHQ/0.1/js-client");
-				xhr.setRequestHeader("MongoHQ-API-Token", this.apikey);
+				if(!g._mhq_options.is_mongolab) {
+					xhr.setRequestHeader("Accept-Type", "application/json; charset=utf-8");
+					xhr.setRequestHeader("User-Agent", "MongoHQ/0.1/js-client");
+					xhr.setRequestHeader("MongoHQ-API-Token", this.apikey);
+				}
 
 				// remove the api key from document
 				delete data['_apikey'];
 
 				Ti.API.debug("data " + JSON.stringify(data));
+				Ti.API.debug("path " + this.url + path);
 				xhr.send(JSON.stringify(data));
 
 			} else {
-				var body = this.url + path + "?";
+				var body = this.url + path + (g._mhq_options.is_mongolab ? "&" : "?");
 				var paramMap = data || {};
 				for(var a in paramMap) {
 					body += Titanium.Network.encodeURIComponent(a) + '=' + Titanium.Network.encodeURIComponent(paramMap[a]) + '&';
@@ -102,8 +86,10 @@ exports.Client = function(g) {
 				xhr.open(method, body);
 
 				xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-				xhr.setRequestHeader("User-Agent", "MongoHQ/0.1/js-client");
-				xhr.setRequestHeader("MongoHQ-API-Token", this.apikey);
+				if(!g._mhq_options.is_mongolab) {
+					xhr.setRequestHeader("User-Agent", "MongoHQ/0.1/js-client");
+					xhr.setRequestHeader("MongoHQ-API-Token", this.apikey);
+				}
 
 				xhr.send();
 			}
@@ -306,10 +292,15 @@ exports.Client = function(g) {
 	return g.mongohq = {
 
 		authenticate : function(options) {
-			// for use without mongoHQ and teh default mongodb db url format
 			g._mhq_options = options || {};
-			g._mhq_options.DATABASES = (!options['url'] ? "databases" : "db");
-
+			if(options.url.indexOf("mongolab") !== -1) {
+				g._mhq_options.DATABASES = "databases";
+				g._mhq_options.is_mongolab = true;
+			} else if(options.url.indexOf("mongohq") !== -1) {
+				// for use without mongoHQ and the default mongodb db url format
+				g._mhq_options.DATABASES = "databases";
+				g._mhq_options.is_mongohq = true;
+			}
 
 			return this;
 		},

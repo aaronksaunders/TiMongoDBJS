@@ -3,11 +3,17 @@ var Client = require('mongoDBClient').Client;
 client = new Client(APP);
 
 APP.mongohq.authenticate({
-	url : "http://localhost:28017",
+	url : 'https://api.mongohq.com',
 	apikey : 'ira8ckpp77qfkpnsf2lc'
 });
 
-
+if(false) {
+	// mongolabs test
+	APP.mongohq.authenticate({
+		url : "https://api.mongolab.com/api/1/",
+		apikey : '4fd3dc50e4b0f453cdeadd2d'
+	});
+}
 
 function listDatabases() {
 	APP.mongohq.databases.all({
@@ -94,7 +100,7 @@ function createDocument() {
 		"col_name" : "my_users",
 		"data" : {
 			'document' : {
-				"name" : "Andrea" + new Date(),
+				"name" : "Andrea " + new Date(),
 				"zip" : "20011"
 			}
 		},
@@ -136,7 +142,7 @@ function updateDocument() {
 
 function getDocuments() {
 	APP.mongohq.documents.all({
-		"db_name" : "test_aks",
+		"db_name" : "firstdatabase",
 		"col_name" : "my_users",
 		//"doc_id" : "4fcacbac33256c0008000005",
 		"data" : {
@@ -149,6 +155,5 @@ function getDocuments() {
 
 createDocument();
 
-
-getDocuments();
+//getDocuments();
 
