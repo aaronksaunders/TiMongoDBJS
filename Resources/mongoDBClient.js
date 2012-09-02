@@ -1,7 +1,7 @@
 exports.Client = function(options) {
 	var Collection, Connection, Database, Deployment, Document, Index, Invoice, Plan, SlowQuery, connection, _mdb_options;
 
-var that = this;
+	var that = this;
 
 	Connection = function(options) {
 		this._mdb_options = that._mdb_options;
@@ -34,8 +34,10 @@ var that = this;
 				path = path + "?apiKey=" + this.apikey
 
 				// remove the "document" data and just pass the data
-				data = data.document;
-
+				if ( data.document ) {
+					data = data.document;
+				}
+				
 			} else {
 				data['_apikey'] = this.apikey;
 			}
@@ -72,7 +74,9 @@ var that = this;
 				}
 
 				// remove the api key from document
-				delete data['_apikey'];
+				if(!this._mdb_options.is_mongolab) {
+					delete data['_apikey'];
+				}
 
 				Ti.API.debug("data " + JSON.stringify(data));
 				Ti.API.debug("path " + this.url + path);
@@ -117,6 +121,18 @@ var that = this;
 		options = options || {};
 		db_name = options['db_name'];
 		return connection().call("/" + this._mdb_options.DATABASES + "/" + db_name, 'GET', options);
+	};
+		
+	Database.prototype.runCommand = function(options) {
+		// runCommand is only valid on mongolab right now.
+		if (!this._mdb_options.is_mongolab) {
+			return null
+		}
+				
+		var db_name;
+		options = options || {};
+		db_name = options['db_name'];
+		return connection().call("/" + this._mdb_options.DATABASES + "/" + db_name + "/runCommand", 'POST', options);
 	};
 	Database.prototype.create = function(options) {
 		options = options || {};
